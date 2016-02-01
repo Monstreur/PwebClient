@@ -32,8 +32,6 @@ function modeCalculatrice (mode) {
 			calcScient.remove();
 		}
 		
-		ajouterBoutons(mode);
-		
 	}else{
 		var btn1 = document.getElementById('modeClassique');
 		btn1.removeAttribute("disabled");
@@ -64,8 +62,9 @@ function modeCalculatrice (mode) {
 			body.insertBefore(nodeDiv,document.getElementById('laCalculatrice'));
 		}
 		
-		ajouterBoutons(mode);
 	}
+		
+	ajouterBoutons(mode);
 }
 function initButton() {
     var btn1 = document.getElementById('modeClassique');
@@ -83,15 +82,39 @@ function initEventHandlers(element, event, fx) {
 
 initEventHandlers(window, 'load', initButton);
 
+
+Math.puissancede2 = function(value){
+	return value*value;
+}
+Math.puissancede3 = function(value){
+	return value*value*value;
+}
+Math.factorielle = function(n) {
+   return n > 1?n * Math.factorielle(n-1):1;
+}
+
+
 function resolve() {
 	var z = document.getElementById('resultat');
 	z.innerHTML = eval(z.innerHTML);
 }
- 
-
+function clearAll() {
+	var z = document.getElementById('resultat');
+	z.innerHTML = "";
+}
+function clearOne() {
+	var z = document.getElementById('resultat');
+	z.innerHTML = z.innerHTML.substring(0,z.innerHTML.length-1);
+}
 function touche(t) {
 	var z = document.getElementById('resultat');
 	z.innerHTML += t; 
+}
+function special(nom) {
+    var z = document.getElementById('resultat');
+    resolve();
+    z.innerHTML = "Math."+nom+"("+z.innerHTML+")";
+    resolve();
 }
 
 function ajouterBouton(value,actionBouton,zone){
@@ -137,11 +160,21 @@ function ajouterBoutons(mode) {
 	
 	nodeDiv.appendChild(document.createElement('br'));
 	
+	ajouterBouton("AC",function() {clearAll();},nodeDiv);
+	ajouterBouton("C",function() {clearOne();},nodeDiv);
 	ajouterBouton("=",function() {resolve();},nodeDiv);
 	
 	if(mode==1){
-		
+		var nodeDiv = document.getElementById('laCalculatriceScientifique');
+	
+		ajouterBouton("√",function() {special("sqrt");},nodeDiv);
+		ajouterBouton("^2",function() {special("puissancede2");},nodeDiv);
+		ajouterBouton("^3",function() {special("puissancede3");},nodeDiv);
+		ajouterBouton("π",function() {touche("Math.PI");},nodeDiv);
+		ajouterBouton("n!",function() {special("factorielle");},nodeDiv);
+
 	}
+
 		
 }
 
